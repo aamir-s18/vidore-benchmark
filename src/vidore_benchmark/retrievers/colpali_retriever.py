@@ -52,10 +52,11 @@ class ColPaliRetriever(VisionRetriever):
         self.model = cast(
             ColPali,
             ColPali.from_pretrained(model_name, torch_dtype=torch.bfloat16, device_map=device),
-        ).eval()
+        )
         logger.info(f"Loaded ColPali model (non-trained weights) from `{model_name}`")
 
         self.model.load_adapter(adapter_name)
+        self.model = self.model.eval()
         logger.info(f"Loaded ColPali adapter from `{adapter_name}`")
 
         self.scorer = ColPaliScorer(is_multi_vector=True, device=self.device)
